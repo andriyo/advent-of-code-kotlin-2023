@@ -1,3 +1,8 @@
+package day01
+
+import println
+import readInput
+
 val digitNames = listOf(
     "one",
     "two",
