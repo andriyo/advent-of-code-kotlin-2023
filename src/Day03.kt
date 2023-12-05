@@ -91,6 +91,7 @@ fun main() {
 
 
 
+    part1(readInput("Day03_test")).println()
     part2(readInput("Day03_test")).println()
     part2(readInput("Day03")).println()
 
