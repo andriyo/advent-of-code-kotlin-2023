@@ -33,38 +33,39 @@ fun main() {
             "Matching $range ($dest) with $currRange is ${range.commonWith(currRange)}".println()
             range.commonWith(currRange)?.let { it to (dest + it.first - range.first) }
         }
-        val outsideRanges = buildList {
-            val firstMatchedRangeStart = matchedRanges.firstOrNull()?.first?.start
-            val firstRange = if (firstMatchedRangeStart == null) {
-                currRange.first..currRange.last
-            } else {
-                if (firstMatchedRangeStart > currRange.first) {
-                    currRange.first..firstMatchedRangeStart.minus(1)
-                } else null
-            }
-            firstRange?.let {
-                "outside first range $firstRange".println()
-                add(firstRange to firstRange.first)
-            }
-
-            addAll(matchedRanges.mapIndexedNotNull { index, pair ->
-                if (index != matchedRanges.lastIndex) {
-                    val nextPair = matchedRanges[index + 1]
-                    val aRange = pair.first
-                    val bRange = nextPair.first
-                    val inRangeStart = aRange.last + 1
-                    val inRangeLast = bRange.first - 1
-                    if (inRangeLast - inRangeStart > 0) {
-                        ((inRangeStart..inRangeLast) to inRangeStart).also { "in range $it".println() }
-                    } else null
-                } else null
-            })
-            val lastRange = (matchedRanges.lastOrNull()?.first?.last?.plus(1) ?: currRange.last)..currRange.last
-            if (lastRange.first < lastRange.last) {
-                "outside last range $lastRange".println()
-                add(lastRange to lastRange.first)
-            }
+        val firstMatchedRangeStart = matchedRanges.firstOrNull()?.first?.start
+        val firstRange = if (firstMatchedRangeStart == null) {
+            currRange.first..currRange.last
+        } else {
+            if (firstMatchedRangeStart > currRange.first) {
+                currRange.first..firstMatchedRangeStart.minus(1)
+            } else null
         }
+        val frontOutsideRange = firstRange?.let {
+            "outside first range $firstRange".println()
+            firstRange to firstRange.first
+        }
+
+        val lastRange = (matchedRanges.lastOrNull()?.first?.last?.plus(1) ?: currRange.last)..currRange.last
+
+        val backOutsideRange =  if (lastRange.first < lastRange.last) {
+            "outside last range $lastRange".println()
+            lastRange to lastRange.first
+        } else null
+        val outsideRanges = listOfNotNull(frontOutsideRange) +
+                matchedRanges.mapIndexedNotNull { index, pair ->
+                    if (index != matchedRanges.lastIndex) {
+                        val nextPair = matchedRanges[index + 1]
+                        val aRange = pair.first
+                        val bRange = nextPair.first
+                        val inRangeStart = aRange.last + 1
+                        val inRangeLast = bRange.first - 1
+                        if (inRangeLast - inRangeStart > 0) {
+                            ((inRangeStart..inRangeLast) to inRangeStart).also { "in range $it".println() }
+                        } else null
+                    } else null
+                } + listOfNotNull(backOutsideRange)
+
         (matchedRanges + outsideRanges).println()
         return (matchedRanges + outsideRanges).map {
             findLocationFast(
