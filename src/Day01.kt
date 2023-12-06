@@ -40,17 +40,17 @@ fun findLast(s: String): String {
 fun main() {
 
     fun part1(input: List<String>): Int {
-        return input.map {
+        return input.sumOf {
             Integer.parseInt(
                 it.find { it.isDigit() }.toString() + it.findLast { it.isDigit() }
             )
-        }.sum()
+        }
     }
 
     fun part2(input: List<String>): Int {
-        return input.map { s ->
+        return input.sumOf { s ->
             Integer.parseInt(findFirst(s) + findLast(s))
-        }.sum()
+        }
     }
 
 

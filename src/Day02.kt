@@ -9,9 +9,9 @@ enum class Color {
 }
 
 fun main() {
-    fun makeBag(s: String): Map<Color, Int> = s.split(",").map {
+    fun makeBag(s: String): Map<Color, Int> = s.split(",").associate {
         it.trim().split(" ").let { Color.valueOf(it[1]) to it[0].toInt() }
-    }.toMap()
+    }
 
     fun possibleBag(s: String): Boolean {
         val bag = makeBag(s)
@@ -20,11 +20,11 @@ fun main() {
 
     fun part1(list: List<String>): Int {
         val gameIdStartPosition = "Game ".length
-        return list.map {
+        return list.sumOf {
             val (gameIdStr, allBagsStr) = it.split(":")
             val gameId = gameIdStr.substring(gameIdStartPosition).toInt()
             if (allBagsStr.split(";").all { possibleBag(it) }) gameId else 0
-        }.sum()
+        }
     }
 
 

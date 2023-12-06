@@ -6,7 +6,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 fun LongRange.commonWith(other: LongRange): LongRange? {
-    val start = max(start, other.start)
+    val start = max(start, other.first)
     val last = min(last, other.last)
     if (start > last) return null
     return start..last
@@ -36,15 +36,15 @@ fun main() {
         val outsideRanges = buildList {
             val firstMatchedRangeStart = matchedRanges.firstOrNull()?.first?.start
             val firstRange = if (firstMatchedRangeStart == null) {
-                currRange.start..currRange.last
+                currRange.first..currRange.last
             } else {
-                if (firstMatchedRangeStart > currRange.start) {
-                    currRange.start..firstMatchedRangeStart.minus(1)
+                if (firstMatchedRangeStart > currRange.first) {
+                    currRange.first..firstMatchedRangeStart.minus(1)
                 } else null
             }
             firstRange?.let {
                 "outside first range $firstRange".println()
-                add(firstRange to firstRange.start)
+                add(firstRange to firstRange.first)
             }
 
             addAll(matchedRanges.mapIndexedNotNull { index, pair ->
@@ -53,16 +53,16 @@ fun main() {
                     val aRange = pair.first
                     val bRange = nextPair.first
                     val inRangeStart = aRange.last + 1
-                    val inRangeLast = bRange.start - 1
+                    val inRangeLast = bRange.first - 1
                     if (inRangeLast - inRangeStart > 0) {
                         ((inRangeStart..inRangeLast) to inRangeStart).also { "in range $it".println() }
                     } else null
                 } else null
             })
             val lastRange = (matchedRanges.lastOrNull()?.first?.last?.plus(1) ?: currRange.last)..currRange.last
-            if (lastRange.start < lastRange.last) {
+            if (lastRange.first < lastRange.last) {
                 "outside last range $lastRange".println()
-                add(lastRange to lastRange.start)
+                add(lastRange to lastRange.first)
             }
         }
         (matchedRanges + outsideRanges).println()

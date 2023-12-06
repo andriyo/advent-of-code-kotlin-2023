@@ -6,16 +6,21 @@ import readInput
 
 fun main() {
     fun part1(m: List<String>): Int {
-        return m.map {
+        return m.sumOf {
             val (winningCards, playerCards) = it.split(": ")[1].split(" | ")
-                .map { it.split("\\s+".toRegex()).filter { it.isNotEmpty() }.map { it.toInt() }.toSet() }
+                .map {
+                    it.split("\\s+".toRegex())
+                        .filter { it.isNotEmpty() }
+                        .map { it.toInt() }
+                        .toSet()
+                }
             val matches = winningCards.intersect(playerCards).size
             (if (matches > 0) 1.shl(matches - 1) else 0)
-        }.sum()
+        }
     }
 
     fun part2(m: List<String>): Int {
-        return m.mapIndexed { cardIndex, it ->
+        return m.map {
             val (winningCards, playerCards) = it.split(": ")[1].split(" | ")
                 .map { it.split("\\s+".toRegex()).filter { it.isNotEmpty() }.map { it.toInt() }.toSet() }
             winningCards.intersect(playerCards).size
