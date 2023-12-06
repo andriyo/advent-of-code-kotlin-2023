@@ -1,4 +1,4 @@
-# advent-of-code-kotlin-2023
+# advent-of-code-kotlin-2023 with Immutable data structures and idiomatic Kotlin
 
 Welcome to the Advent of Code[^aoc] Kotlin project created by [andriyo][github] using the [Advent of Code Kotlin Template][template] delivered by JetBrains.
 
