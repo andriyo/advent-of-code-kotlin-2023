@@ -3,26 +3,12 @@ package day07
 import println
 import readInput
 
-val handTypes = listOf(
-    listOf(1, 1, 1, 1, 1),
-    listOf(2, 1, 1, 1),
-    listOf(2, 2, 1),
-    listOf(3, 1, 1),
-    listOf(3, 2),
-    listOf(4, 1),
-    listOf(5),
-)
 
 val original_marks = "AKQJT"
 val ordered_marks = "EDCBA"
-fun addType(hand: String) = (handTypes.indexOf(powers(hand)).toString() + hand)
-fun powers(hand: String): List<Int> = hand.fold(emptyMap<Char, Int>()) { acc, c ->
-    acc + (c to (acc.getOrDefault(c, 0) + 1))
-}.values.sorted().reversed()
-
 val original_marks2 = "AKQTJ"
 val ordered_marks2 = "DCBA1"
-fun addType2(hand: String) = (handTypes.indexOf(powers2(hand)).toString() + hand)
+fun addType(hand: String) = powers2(hand).joinToString("").padEnd(5) + hand
 fun powers2(hand: String): List<Int> = hand.toList().sorted().reversed().fold(emptyMap<Char, Int>()) { acc, c ->
     if (c == '1') {
         val highestKeyPair = acc.maxByOrNull { it.value }
@@ -53,7 +39,7 @@ fun main() {
     fun part2(m: List<String>) =
         m.map {
             val (hand, bid) = it.split(" ")
-            addType2(hand.map {
+            addType(hand.map {
                 if (!it.isDigit()) ordered_marks2[original_marks2.indexOf(it)] else it
             }.joinToString("")) to bid.toLong()
         }.sortedWith { a, b ->
