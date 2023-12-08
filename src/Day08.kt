@@ -24,31 +24,26 @@ fun loadData(m: List<String>) =
 fun main() {
     fun part1(m: List<String>): Int {
         val (directions, map) = loadData(m)
-        val iter = generateSequence(0) {
-            if (it == directions.length - 1) 0 else it + 1
-        }.iterator()
-        return generateSequence("AAA") {
-            if (it == "ZZZ") null
+        return generateSequence("AAA" to 0) { (loc, dirIndex) ->
+            if (loc == "ZZZ") null
             else {
-                val dir = directions[iter.next()]
-                requireNotNull(map[it]?.get(if (dir == 'L') 0 else 1))
+                val dir = directions[dirIndex]
+                val newDirIndex = if (dirIndex == directions.length - 1) 0 else dirIndex + 1
+                requireNotNull(map[loc]?.get(if (dir == 'L') 0 else 1)) to newDirIndex
             }
         }.count() - 1
     }
 
     fun part2(m: List<String>): Long {
         val (directions, map) = loadData(m)
-        val iter = generateSequence(0) {
-            if (it == directions.length - 1) 0 else it + 1
-        }.iterator()
-
         val initialLocs = map.keys.filter { it.endsWith("A") }
         return initialLocs.map {
-            generateSequence(it) {
-                if (it.endsWith("Z")) null
+            generateSequence(it to 0) { (loc, dirIndex) ->
+                if (loc.endsWith("Z")) null
                 else {
-                    val dir = directions[iter.next()]
-                    requireNotNull(map[it]?.get(if (dir == 'L') 0 else 1))
+                    val dir = directions[dirIndex]
+                    val newDirIndex = if (dirIndex == directions.length - 1) 0 else dirIndex + 1
+                    requireNotNull(map[loc]?.get(if (dir == 'L') 0 else 1)) to newDirIndex
                 }
             }.fold(0L) { acc, _ ->
                 acc + 1
