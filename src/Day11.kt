@@ -36,9 +36,7 @@ fun main() {
                 val other = galaxies[i]
                 (abs(other.first - pair.first) + abs(other.second - pair.second))
             }
-        }.flatten().reduce { a, b ->
-            a + b
-        }
+        }.flatten().sum()
     }
 
     fun part2(lines: List<String>): Long {
