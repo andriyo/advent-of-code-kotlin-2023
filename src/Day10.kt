@@ -80,15 +80,14 @@ fun main() {
         lines: List<String>,
     ) = bigLoop.zipWithNext().map { (src, dst) ->
         val dir = (dst.first - src.first) to (dst.second - src.second)
-        src.add(rot(dir))
-    }.fold(emptySet<Pos>() to false) { acc, pos ->
+        listOf(src.add(rot(dir)), dst.add(rot(dir)))
+    }.flatten().fold(emptySet<Pos>() to false) { acc, pos ->
         val result = generateSequence(Triple(emptySet<Pos>() to false, emptySet<Pos>(), setOf(pos))) { parameters ->
             val (result, alreadyVisited, positionsToExplore) = parameters
             if (result.second) return@generateSequence null
             if (positionsToExplore.isEmpty())
                 null
-            else
-            {
+            else {
                 val validatedPositionsToExplore = positionsToExplore.filter { pos ->
                     isValid(pos, acc.first.toSet(), alreadyVisited, bigLoopSet)
                 }.toSet()
@@ -115,8 +114,8 @@ fun main() {
     }
 
 
-//    part1(readInput("Day10_test")).println()
-//    part1(readInput("Day10")).println()
+    part1(readInput("Day10_test")).println()
+    part1(readInput("Day10")).println()
     part2(readInput("Day10_test")).println()
     part2(readInput("Day10")).println()
 
