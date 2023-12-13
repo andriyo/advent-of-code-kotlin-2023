@@ -1,4 +1,4 @@
-package day07
+package day08
 
 import println
 import readInput
