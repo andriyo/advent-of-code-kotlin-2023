@@ -8,6 +8,10 @@ fun String.hash() = fold(0) { acc, c ->
     ((acc + c.code) * 17).mod(256)
 }
 
+public operator fun <K, V> LinkedHashMap<out K, V>.plus(pair: Pair<K, V>): LinkedHashMap<K, V> =
+    if (this.isEmpty()) linkedMapOf(pair) else LinkedHashMap(this).apply { put(pair.first, pair.second) }
+public operator fun <K, V> LinkedHashMap<out K, V>.minus(key: K): LinkedHashMap<K, V> =
+    this.toMutableMap().apply { minusAssign(key) } as LinkedHashMap
 
 fun main() {
     fun part1(lines: List<String>): Long {
@@ -15,7 +19,7 @@ fun main() {
     }
 
     fun part2(lines: List<String>): Long {
-        return lines.first().split(",").fold(mapOf<Int, Map<String, Int>>()) { acc, s ->
+        return lines.first().split(",").fold(linkedMapOf<Int, LinkedHashMap<String, Int>>()) { acc, s ->
             val equalsSignIndex = s.indexOf("=")
             val addOperation = equalsSignIndex != -1
             val index = if (equalsSignIndex != -1) {
@@ -29,7 +33,7 @@ fun main() {
                 val focalLength = s.substring(index + 1, index + 2)
 
                 acc + (labelHash to
-                        (acc.getOrElse(labelHash) { emptyMap() } + (label to focalLength.toInt()))
+                        (acc.getOrElse(labelHash) { linkedMapOf() } + (label to focalLength.toInt()))
                         )
             } else {
                 val slots = acc.get(labelHash)
